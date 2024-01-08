@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+VAULT_DIR="$1"
+EXPORT_FILE="$2"
+
+EXPORT_FILE_DIR=$(dirname -- "$EXPORT_FILE")
+EXPORT_FILE_BASENAME=$(basename "$EXPORT_FILE" ".md")
+OUTPUT_FILE_PATH="$EXPORT_FILE_DIR/$EXPORT_FILE_BASENAME.pdf"
+
+PANDOC_FLAGS=" -f markdown+backtick_code_blocks"
+PANDOC_FLAGS+=" -t pdf"
+PANDOC_FLAGS+=" --embed-resources --standalone"
+PANDOC_FLAGS+=" --filter pandoc-crossref --citeproc"
+
+
+
+pandoc $PANDOC_FLAGS --resource-path="$VAULT_DIR/Files" \
+        --resource-path="$EXPORT_FILE_DIR"              \
+        -o "$OUTPUT_FILE_PATH" "$EXPORT_FILE"
