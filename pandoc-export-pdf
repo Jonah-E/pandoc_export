@@ -12,8 +12,11 @@ PANDOC_FLAGS+=" -t pdf"
 PANDOC_FLAGS+=" --embed-resources --standalone"
 PANDOC_FLAGS+=" --filter pandoc-crossref --citeproc"
 
-
-
 pandoc $PANDOC_FLAGS --resource-path="$VAULT_DIR/Files" \
         --resource-path="$EXPORT_FILE_DIR"              \
         -o "$OUTPUT_FILE_PATH" "$EXPORT_FILE"
+
+if [ $? -eq 0 ]
+then
+  echo "Export successfull"
+fi

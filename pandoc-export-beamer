@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
+#
+SCRIPT=$(readlink -f $0)
+SCRIPT_DIR=$(dirname "$SCRIPT")
 
 VAULT_DIR="$1"
 EXPORT_FILE="$2"
+
+TEMPLATES_DIR="$SCRIPT_DIR/templates"
+FILTER_DIR="$SCRIPT_DIR/filters"
 
 EXPORT_FILE_DIR=$(dirname -- "$EXPORT_FILE")
 EXPORT_FILE_BASENAME=$(basename "$EXPORT_FILE" ".md")
@@ -10,7 +16,17 @@ OUTPUT_FILE_PATH="$EXPORT_FILE_DIR/$EXPORT_FILE_BASENAME.pdf"
 PANDOC_FLAGS=" -f markdown+backtick_code_blocks"
 PANDOC_FLAGS+=" -t beamer"
 PANDOC_FLAGS+=" --embed-resources --standalone"
+PANDOC_FLAGS+=" --filter pandoc-crossref --citeproc"
+PANDOC_FLAGS+=" --slide-level=2"
+PANDOC_FLAGS+=" --listings"
 
 pandoc $PANDOC_FLAGS --resource-path="$VAULT_DIR/Files" \
         --resource-path="$EXPORT_FILE_DIR"              \
+        --include-in-header="$TEMPLATES_DIR/preamble_beamer.tex" \
+        --lua-filter="$FILTER_DIR/beamer-visible.lua" \
         -o "$OUTPUT_FILE_PATH" "$EXPORT_FILE"
+
+if [ $? -eq 0 ]
+then
+  echo "Export successfull"
+fi
