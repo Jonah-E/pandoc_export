@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+SCRIPT=$(readlink -f $0)
+SCRIPT_DIR="$(dirname "$SCRIPT")"
+
+$SCRIPT_DIR/setup "$SCRIPT_DIR"
 
 VAULT_DIR="$1"
 EXPORT_FILE="$2"

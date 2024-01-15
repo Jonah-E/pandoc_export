@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]
+then
+  echo "Give base directory as argument."
+  exit 1
+fi
+
+CITE_STYLES="
+ieee
+"
+
+BASE_DIR="$1"
+
+if [ ! -d "$BASE_DIR/csl" ]
+then
+  mkdir -p "$BASE_DIR/csl"
+fi
+
+for STYLE in $CITE_STYLES;
+do
+  if [ ! -f "$BASE_DIR/csl/$STYLE.csl" ]
+  then
+    wget -O "$BASE_DIR/csl/$STYLE.csl" "https://www.zotero.org/styles/$STYLE"
+  fi
+done
+
+
