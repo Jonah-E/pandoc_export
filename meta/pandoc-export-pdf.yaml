@@ -1,0 +1,16 @@
+
+codeBlockCaptions: true
+
+figPrefix:
+  - "figure"
+  - "figures"
+
+tblPrefix:
+  - "table"
+  - "tables"
+
+lstPrefix:
+  - "listing"
+  - "listings"
+
+reference-section-title: Bibliography

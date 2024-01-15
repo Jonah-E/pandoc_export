@@ -3,17 +3,26 @@
 VAULT_DIR="$1"
 EXPORT_FILE="$2"
 
+TEMPLATES_DIR="$SCRIPT_DIR/templates"
+FILTER_DIR="$SCRIPT_DIR/filters"
+
 EXPORT_FILE_DIR=$(dirname -- "$EXPORT_FILE")
 EXPORT_FILE_BASENAME=$(basename "$EXPORT_FILE" ".md")
 OUTPUT_FILE_PATH="$EXPORT_FILE_DIR/$EXPORT_FILE_BASENAME.pdf"
 
-PANDOC_FLAGS=" -f markdown+backtick_code_blocks"
+PANDOC_FLAGS=" -f markdown+backtick_code_blocks+yaml_metadata_block"
 PANDOC_FLAGS+=" -t pdf"
 PANDOC_FLAGS+=" --embed-resources --standalone"
 PANDOC_FLAGS+=" --filter pandoc-crossref --citeproc"
+PANDOC_FLAGS+=" --highlight-style=tango"
+PANDOC_FLAGS+=" --pdf-engine=lualatex"
+PANDOC_FLAGS+=" --number-sections"
 
 pandoc $PANDOC_FLAGS --resource-path="$VAULT_DIR/Files" \
         --resource-path="$EXPORT_FILE_DIR"              \
+        --resource-path="$SCRIPT_DIR/csl"              \
+        --metadata-file="$SCRIPT_DIR/meta/pandoc-export-pdf.yaml" \
+        --bibliography="$VAULT_DIR/Files/My Library.bib" \
         -o "$OUTPUT_FILE_PATH" "$EXPORT_FILE"
 
 if [ $? -eq 0 ]
