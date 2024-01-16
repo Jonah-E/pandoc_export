@@ -14,3 +14,7 @@ lstPrefix:
   - "listings"
 
 reference-section-title: Bibliography
+
+header-includes: |
+  \usepackage[font=scriptsize,labelfont=bf]{caption}
+
