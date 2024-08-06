@@ -17,3 +17,5 @@ sed -i -E "s/^##(.*)$/\\\\subsection\{\1\}/"     "$OUTPUT_FILE"
 sed -i -E "s/^#(.*)$/\\\\section\{\1\}/"         "$OUTPUT_FILE"
 
 sed -i -E "s/\[\[@([^]]*)\]\]/\\\\cite\{\1\}/g" "$OUTPUT_FILE"
+
+sed -i -E "s/\*\*([^*]*)\*\*/\\\\textbf\{\1\}/g"  "$OUTPUT_FILE"
