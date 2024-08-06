@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-pwd
 
 BIBTEX_FILE="$1"
+
+TMP_FILE="$(mktemp)"
 
 KEYS_TO_REMOVE="
  file
@@ -14,6 +15,14 @@ KEYS_TO_REMOVE="
  eprinttype
 "
 
+cat $BIBTEX_FILE > $TMP_FILE
+
 for KEY in $KEYS_TO_REMOVE; do
-  sed -i -E "/$KEY = \{/d"  "$BIBTEX_FILE"
+  sed -i -E "/$KEY = \{/d"  "$TMP_FILE"
 done
+
+diff $BIBTEX_FILE $TMP_FILE
+
+cat $TMP_FILE > $BIBTEX_FILE
+
+rm $TMP_FILE
