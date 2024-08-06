@@ -7,10 +7,11 @@ KEYS_TO_REMOVE="
  file
  abstract
  doi
- isbn
  issn
  keywords
  langid
+ eprint
+ eprinttype
 "
 
 for KEY in $KEYS_TO_REMOVE; do
