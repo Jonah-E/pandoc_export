@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+pwd
+
+BIBTEX_FILE="$1"
+
+KEYS_TO_REMOVE="
+ file
+ abstract
+ doi
+ isbn
+ issn
+ keywords
+ langid
+"
+
+for KEY in $KEYS_TO_REMOVE; do
+  sed -i -E "/$KEY = \{/d"  "$BIBTEX_FILE"
+done

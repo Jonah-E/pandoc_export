@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+pwd
+
+INPUT_FILE="$1"
+OUTPUT_FILE="$2"
+
+
+echo "\documentclass[main.tex]{subfiles}\begin{document}" > "$OUTPUT_FILE"
+echo "\begin{document}" >> "$OUTPUT_FILE"
+cat "$INPUT_FILE" >> "$OUTPUT_FILE"
+echo "\end{document}" >> "$OUTPUT_FILE"
+
+sed -i -E '/^---/,/^\---/d'  "$OUTPUT_FILE"
+
+sed -i -E "s/^###(.*)$/\\\\subsubsection\{\1\}/" "$OUTPUT_FILE"
+sed -i -E "s/^##(.*)$/\\\\subsection\{\1\}/"     "$OUTPUT_FILE"
+sed -i -E "s/^#(.*)$/\\\\section\{\1\}/"         "$OUTPUT_FILE"
+
+sed -i -E "s/\[\[@([^]]*)\]\]/\\\\cite\{\1\}/g" "$OUTPUT_FILE"
