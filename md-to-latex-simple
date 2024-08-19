@@ -1,21 +1,33 @@
 #!/usr/bin/env bash
-pwd
+
+USAGE="
+md-to-latex-simple <MARKDOWN INPUT FILE> <LATEX OUTPUT FILE>"
+
+if [ $# -ne 2 ]; then
+  echo $USAGE
+  exit 1
+fi
+
 
 INPUT_FILE="$1"
 OUTPUT_FILE="$2"
 
+cat "$INPUT_FILE"       > "$OUTPUT_FILE"
 
-echo "\documentclass[main.tex]{subfiles}\begin{document}" > "$OUTPUT_FILE"
-echo "\begin{document}" >> "$OUTPUT_FILE"
-cat "$INPUT_FILE" >> "$OUTPUT_FILE"
-echo "\end{document}" >> "$OUTPUT_FILE"
-
+# Delete initial metadata
 sed -i -E '/^---/,/^\---/d'  "$OUTPUT_FILE"
 
+# Add sections, ORDER IS IMPORTANT
 sed -i -E "s/^###(.*)$/\\\\subsubsection\{\1\}/" "$OUTPUT_FILE"
 sed -i -E "s/^##(.*)$/\\\\subsection\{\1\}/"     "$OUTPUT_FILE"
 sed -i -E "s/^#(.*)$/\\\\section\{\1\}/"         "$OUTPUT_FILE"
 
-sed -i -E "s/\[\[@([^]]*)\]\]/\\\\cite\{\1\}/g" "$OUTPUT_FILE"
+# Fix citations
+sed -i -E "s/\s?\[\[@([^]]*)\]\]/\~\\\\cite\{\1\}/g" "$OUTPUT_FILE"
 
+# Fix bold and italic font, ORDER IS IMPORTANT
 sed -i -E "s/\*\*([^*]*)\*\*/\\\\textbf\{\1\}/g"  "$OUTPUT_FILE"
+sed -i -E "s/\*([^*]*)\*/\\\\textit\{\1\}/g"      "$OUTPUT_FILE"
+
+sed -i -E "s/~[^\][^c][^i][^t][^e]/\$\\\\sim\$/g"      "$OUTPUT_FILE"
+sed -i -E "s/%/\\\\%/g"      "$OUTPUT_FILE"
